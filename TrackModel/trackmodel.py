@@ -43,6 +43,13 @@ class TrackModel:
     def get_position(self, train):
         return train.position
 
+    ## Get line from name
+    def get_line(self, line):
+        if (line.lower() == "green"):
+            return self.lines[1]
+        elif (line.lower() == "red"):
+            return self.lines[0]
+
     ## Current distance traveled --> block number
     def get_train_block_position(self, line, train):
         # after yard

@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./ECE1140/TrainModel"
+    ]
+}

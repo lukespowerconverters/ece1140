@@ -1,0 +1,15 @@
+Design Review Notes
+- if train stops before station, how does train behind it stop in time?
+	- 2 block padded authority
+- track controller is vital
+	- can change commanded speed and authority
+- no train is longer than min. block size, train CANNOT span more than 1 block at a time
+- signals cannot be global -- what if track end is 40 miles away?
+	- controllers can't be aware of every block at one time
+	- 1 to 2 block overlap for each controller
+- sequence diagram -- show the objects actually placed after creation
+	- i.e., show the new train placed in the yard
+- CTC can communicate directly with track model for some instances
+	- commanded speed, authority, etc. still have to go through track controller
+	- can instantiate new trains directly to the train model (train_list)
+- 

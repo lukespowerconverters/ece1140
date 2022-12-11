@@ -7,7 +7,7 @@ QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #en
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
 
 def file_dialog():
-    file , check = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "", "All Files (*);;Python Files (*.py);;Text Files (*.txt)")
+    file , check = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "", "Microsoft Excel Worksheet (*.xlsx)")
     trackfile = file
     if check:
         print(trackfile)

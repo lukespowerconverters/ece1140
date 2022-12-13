@@ -93,7 +93,7 @@ class MyWidget(QWidget):
         # Edit table entries
         self.import_button.clicked.connect(lambda: self.file.file_load(self))
 
-        # Add button to track infor tab widget
+        # Add button to track info tab widget
         self.track_info.layout.addWidget(self.import_button)
 
         # Add line tabs to track info tab widget

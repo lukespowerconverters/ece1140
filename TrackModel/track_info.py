@@ -67,7 +67,7 @@ class TrackInfo:
         else:
             r = self.green_table.rowCount()
 
-        for x in range(r - 1):
+        for x in range(r):
             x = x + 1
             red_cell = self.get_cell(self.red_table, x, 0)
             green_cell = self.get_cell(self.green_table, x, 0)
@@ -133,7 +133,7 @@ class TrackInfo:
             values = row[1]
             for col_index, value in enumerate(values):
                 if isinstance(value, (float, int)):
-                    value = '{0:0,.0f}'.format(value)
+                    value = '{0:0,.4f}'.format(value)
                 tableItem = QTableWidgetItem(str(value))
                 table.setItem(row[0], col_index, tableItem)
 

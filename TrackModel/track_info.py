@@ -1,6 +1,7 @@
 import sys
+import os
 import pandas as pd
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QFileDialog
 from openpyxl import load_workbook
 
 class TrackInfo:
@@ -12,6 +13,25 @@ class TrackInfo:
         self.current_table = QTableWidget()
         self.red_length = 0
         self.green_length = 0
+
+    def file_load(self, widget):
+        file, check = QFileDialog.getOpenFileName(
+            parent = widget,
+            caption = "Select a file",
+            directory = os.getcwd(),
+            filter = "Microsoft Excel Worksheet (*.xlsx *.xls)"
+        )
+        trackfile = file
+        if check:
+            self.set_filepath(trackfile)
+            print(trackfile)
+
+        print(self.get_sheet(0))
+        print(self.get_sheet(1))
+
+        self.load_excel_data(self.get_sheet(0), self.red_table)
+        self.load_excel_data(self.get_sheet(1), self.green_table)
+        self.set_dimensions()
 
     def set_filepath(self, fp):
         self.filepath = fp
@@ -93,12 +113,11 @@ class TrackInfo:
     def load_excel_data(self, worksheet_name, table):
         ## Fill out red_table and green_table when load function is called
         #  saves values from table in local variables
-        if (worksheet_name.lower() == "red line"):
+        sheet_name = worksheet_name.lower()
+        if (sheet_name == "red line"):
             self.red_table = table
-        elif (worksheet_name.lower() == "green line"):
+        elif (sheet_name == "green line"):
             self.green_table = table
-        elif (worksheet_name.lower() == "blue line"):
-            self.blue_table = table
         
         df = pd.read_excel(self.filepath, worksheet_name)
         if df.size == 0:
@@ -119,5 +138,4 @@ class TrackInfo:
                 table.setItem(row[0], col_index, tableItem)
 
         table.setColumnWidth(2, 300)
-        return table
     

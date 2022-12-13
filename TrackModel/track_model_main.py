@@ -8,7 +8,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from trackmodel import *
-from example_file import *
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True) #use highdpi icons
@@ -79,9 +78,9 @@ class MyWidget(QWidget):
 
         # Create 2 table widgets and place them on the corresponing line tabs
         self.green_line.layout = QVBoxLayout(self)
-        self.green_table = QTableWidget(self.green_line)
+        self.green_table = self.file.green_table
         self.red_line.layout = QVBoxLayout(self)
-        self.red_table = QTableWidget(self.red_line)
+        self.red_table = self.file.red_table
 
         # Add green line table to green line tab
         self.green_line.layout.addWidget(self.green_table)
@@ -92,7 +91,7 @@ class MyWidget(QWidget):
         self.red_line.setLayout(self.red_line.layout)
 
         # Edit table entries
-        self.import_button.clicked.connect(file_dialog)
+        self.import_button.clicked.connect(lambda: self.file.file_load(self))
 
         # Add button to track infor tab widget
         self.track_info.layout.addWidget(self.import_button)
@@ -104,7 +103,6 @@ class MyWidget(QWidget):
         ## HOME TAB
         # Create first tab
         self.home.layout = QHBoxLayout(self)
-
 
         #walks up the file tree until ECE1140 directory is found
         destination = str(pathlib.Path().absolute())

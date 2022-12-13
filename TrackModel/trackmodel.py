@@ -2,7 +2,6 @@ from line import *
 from heater import *
 from trainloc import *
 from track_info import *
-from example_file import file_dialog
 
 import pathlib
 

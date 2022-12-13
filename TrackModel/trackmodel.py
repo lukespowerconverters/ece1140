@@ -2,6 +2,7 @@ from line import *
 from heater import *
 from trainloc import *
 from track_info import *
+from extra import track_information
 
 import pathlib
 
@@ -17,7 +18,7 @@ class TrackModel:
         self.train_table = []
 
         # Track layout file
-        self.file = TrackInfo()
+        self.file = track_information()
 
         # Used to show the train moving correctly for Iteration #3 only
         self.prev_block = None
@@ -29,6 +30,10 @@ class TrackModel:
     #     id = len(self.trains)
     #     t = Train(id, route)
     #     self.trains.append(t)
+
+    ## Import new track model file
+    def import_model(self, widget):
+        self.file.file_load(widget)
 
     ## Delete trains from the map
     def remove_train(self, id):

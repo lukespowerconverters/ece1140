@@ -32,7 +32,7 @@ class MyWidget(QWidget):
     def __init__(self, parent):
         super(QWidget, self).__init__(parent)
         self.layout = QVBoxLayout(self)
-        self.file = TrackInfo()
+        self.model = TrackModel()
         
         # Initialize tab screen
         self.tabs = QTabWidget()
@@ -78,20 +78,20 @@ class MyWidget(QWidget):
 
         # Create 2 table widgets and place them on the corresponing line tabs
         self.green_line.layout = QVBoxLayout(self)
-        self.green_table = self.file.green_table
+        #self.green_table = self.file.green_table
         self.red_line.layout = QVBoxLayout(self)
-        self.red_table = self.file.red_table
+        #self.red_table = self.file.red_table
 
         # Add green line table to green line tab
-        self.green_line.layout.addWidget(self.green_table)
+        #self.green_line.layout.addWidget(self.green_table)
         self.green_line.setLayout(self.green_line.layout)
 
         # Add red line table to red line tab
-        self.red_line.layout.addWidget(self.red_table)
+        #self.red_line.layout.addWidget(self.red_table)
         self.red_line.setLayout(self.red_line.layout)
 
         # Edit table entries
-        self.import_button.clicked.connect(lambda: self.file.file_load(self))
+        self.import_button.clicked.connect(lambda: self.model.import_model(self))
 
         # Add button to track info tab widget
         self.track_info.layout.addWidget(self.import_button)

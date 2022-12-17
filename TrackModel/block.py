@@ -50,12 +50,6 @@ class Block:
         self.beacon.set_station2(s2)
         self.beacon.set_side(s3)
 
-    def set_station(self, Station):
-        self.station = Station
-
-    def get_station(self):
-        return self.station
-
     def get_number(self):
         return self.number
 

@@ -6,8 +6,22 @@ class Line:
         self.name = name
         #self.blocks = doubly_linked_list()
         self.blocks = []
+        self.stations = []
         self.line_ticket_sales = 0
         self.total_length = 0
+
+    def add_station(self, name, block, side):
+        new_station = Station()
+        new_station.name = name
+        new_station.block = block
+        new_station.side = side
+        self.stations.append(new_station)
+
+    def set_station(self, Station):
+        self.station = Station
+
+    def get_station(self):
+        return self.station
 
     def propogate_line(self, max):
         for x in range(max):

@@ -1,6 +1,6 @@
 ### TESTING CODE ###
-import TrackModel
-
+from trackmodel import TrackModel
+from extra import track_information
 track = TrackModel()
 
 
@@ -11,9 +11,61 @@ track = TrackModel()
 # Load track model
 #*****************************************
 
-## Import only .xlsx type files
+## Test use case
+file = track_information()
+file.set_filepath('ece1140/TrackModel/track_layout_2.0.xlsx')
 
-## Export file data into GUI tables
+## Import track model layout data file
+def get_file():
+    file.read_new_data()
+    sql_query = """SELECT name FROM sqlite_master WHERE type='table'"""
+    file.c.execute(sql_query)
+    tables = file.c.fetchall()
+
+    # Correct number of data tables created
+    assert len(tables) == 6, "Correct number of tables created in local SQL database is 6"
+
+    # Table data entered correctly
+
+get_file()
+
+## Delete all tables in the database
+def clear_db():
+    file.read_new_data()
+    file.delete_tables()
+
+    sql_query = """SELECT name FROM sqlite_master WHERE type='table'"""
+    file.c.execute(sql_query)
+    tables = file.c.fetchall()
+
+    # Correct number of data tables created
+    assert len(tables) == 0, "Correct number of tables created in local SQL database is 0"
+
+clear_db()
+
+## Import station data into SQL tables
+def get_station_info():
+    file.read_new_data()
+    sql_query = """SELECT * FROM Stations"""
+    file.c.execute(sql_query)
+    stations = file.c.fetchall()
+
+    # Correct number of stations in the table
+    assert len(stations) == 26, "Correct number of stations is 26"
+
+get_station_info()
+
+## Import switch data into SQL tables
+def get_switch_info():
+    file.read_new_data()
+    sql_query = """SELECT * FROM Switches"""
+    file.c.execute(sql_query)
+    switches = file.c.fetchall()
+
+    # Correct number of switches in the table
+    assert len(switches) == 13, "Correct number of switches is 13"
+
+get_switch_info()
 
 ## Correct number of lines
 def num_of_lines():

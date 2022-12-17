@@ -1,8 +1,9 @@
 class Station:
     def __init__(self):
         self.name = ""
-        self.ticket_sales = 0
+        self.block = 0
         self.side = ""
+        self.ticket_sales = 0
         self.train_occupancy = 0
         self.train_at_station = False
 

@@ -1,6 +1,7 @@
 import pandas as pd
 import sys
 import pathlib
+import sqlite3
 
 from openpyxl import load_workbook
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -78,21 +79,22 @@ class MyWidget(QWidget):
 
         # Create 2 table widgets and place them on the corresponing line tabs
         self.green_line.layout = QVBoxLayout(self)
-        #self.green_table = self.file.green_table
+        self.green_table = QTableWidget()
         self.red_line.layout = QVBoxLayout(self)
-        #self.red_table = self.file.red_table
+        self.red_table = QTableWidget()
 
         # Add green line table to green line tab
-        #self.green_line.layout.addWidget(self.green_table)
+        self.green_line.layout.addWidget(self.green_table)
         self.green_line.setLayout(self.green_line.layout)
 
         # Add red line table to red line tab
-        #self.red_line.layout.addWidget(self.red_table)
+        self.red_line.layout.addWidget(self.red_table)
         self.red_line.setLayout(self.red_line.layout)
 
         # Edit table entries
-        self.import_button.clicked.connect(lambda: self.model.import_model(self))
-
+        self.import_button.clicked.connect(lambda: self.import_clicked())
+        
+        #self.loaddata()
         # Add button to track info tab widget
         self.track_info.layout.addWidget(self.import_button)
 
@@ -133,6 +135,46 @@ class MyWidget(QWidget):
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
+
+    def import_clicked(self):
+        self.model.import_model(self)
+        self.green_table.setHorizontalHeaderLabels(self.model.file.get_headers_green())
+        self.green_line.layout.addWidget(self.green_table)
+        self.loaddata()
+
+    def loaddata(self):
+        connection = self.model.file.db_conn
+        cur = connection.cursor()
+        
+        ## Display data for the Red Line
+        sqlquery = "SELECT * FROM 'Red Line'"
+        tableRow = 0
+        cur.execute(sqlquery)
+        rows = cur.fetchall()
+        col_count = len(rows[0])
+        self.red_table.setColumnCount(col_count)
+        self.red_table.setRowCount(len(rows))
+        self.red_table.setHorizontalHeaderLabels(self.model.file.get_headers_red())
+
+        for row in rows:
+            for col in range(col_count):
+                self.red_table.setItem(tableRow, col, QtWidgets.QTableWidgetItem(str(row[col])))
+            tableRow += 1
+
+        ## Display data for the Green Line
+        sqlquery = "SELECT * FROM 'Green Line'"
+        tableRow = 0
+        cur.execute(sqlquery)
+        rows = cur.fetchall()
+        col_count = len(rows[0])
+        self.green_table.setColumnCount(col_count)
+        self.green_table.setRowCount(len(rows))
+        self.green_table.setHorizontalHeaderLabels(self.model.file.get_headers_green())
+
+        for row in rows:
+            for col in range(col_count):
+                self.green_table.setItem(tableRow, col, QtWidgets.QTableWidgetItem(str(row[col])))
+            tableRow += 1
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

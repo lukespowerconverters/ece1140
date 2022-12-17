@@ -12,6 +12,28 @@ class track_information:
     db_conn = sqlite3.connect("ece1140/TrackModel/data/trackmodel.db")
     c = db_conn.cursor()
 
+    def get_headers_red(self):
+        """
+        get the column names of the specified table
+        """
+        sql =  '''SELECT * FROM 'Red Line';'''
+        cols = self.c.execute(sql)
+        headers = []
+        for col in cols.description:
+            headers.append(str(col[0]))
+        return headers
+
+    def get_headers_green(self):
+        """
+        get the column names of the specified table
+        """
+        sql =  '''SELECT * FROM 'Green Line';'''
+        cols = self.c.execute(sql)
+        headers = []
+        for col in cols.description:
+            headers.append(str(col[0]))
+        return headers
+
     def file_load(self, widget):
         file, check = QFileDialog.getOpenFileName(
             parent = widget,
@@ -290,5 +312,6 @@ class track_information:
                     ## Add station to list
                     self.switches.append(infra)
 
-track_info = track_information()
-track_info.read_new_data()
+# track_info = track_information()
+# track_info.read_new_data()
+# track_info.get_headers_red()

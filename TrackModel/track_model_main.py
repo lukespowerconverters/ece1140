@@ -94,7 +94,6 @@ class MyWidget(QWidget):
         # Edit table entries
         self.import_button.clicked.connect(lambda: self.import_clicked())
         
-        #self.loaddata()
         # Add button to track info tab widget
         self.track_info.layout.addWidget(self.import_button)
 
@@ -106,31 +105,43 @@ class MyWidget(QWidget):
         # Create first tab
         self.home.layout = QHBoxLayout(self)
 
-        #walks up the file tree until ECE1140 directory is found
-        destination = str(pathlib.Path().absolute())
-        i = 0
-        while destination[len(destination)-7:] != "ECE1140":
-            i += 1
-            destination = str(pathlib.Path(__file__).parents[i])
-        #creates the expected text file based on the controller id
-        destination += ("/TrackModel/tracklayout.png")
-
         # Create track layout .png
         self.track_png = QLabel(self)
-        pixmap = QPixmap(destination)
+        pixmap = QPixmap("ece1140/TrackModel/tracklayout.png")
         self.track_png.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
 
+        # Create button to get specific block on a specific line
+        self.line_text_box = QLineEdit()
+        self.block_text_box = QLineEdit()
+        self.enter_line_block = QPushButton("Get block info")
+
         # Create table widget to display current block values
         self.table = QTableWidget(self.home)
+        self.table.setRowCount(6)
+        self.table.setColumnCount(1)
+        self.table.setVerticalHeaderLabels(["Line", "Block Number", "Length", "Grade (%)", "Speed Limit (km/hr)", "Elevation (m)"])
+        for r in range(6):
+            self.table.verticalHeader().setSectionResizeMode(r, QHeaderView.ResizeMode.ResizeToContents)
 
         # Add track layout .png to the home tab
         self.home.layout.addWidget(self.track_png)
         self.home.setLayout(self.home.layout)
+
+        # Add table to the right of the track map to the home page
+        self.home_right = QWidget()
+        self.home_right.layout = QVBoxLayout()
+        self.home.layout.addWidget(self.home_right)
+        self.home_right.layout.addWidget(self.table)
+        self.home_right.setLayout(self.home_right.layout)
+
+        # Add function to the button
+        self.enter_line_block.clicked.connect(lambda: self.get_line_block())
         
-        # Add table to the home page
-        self.home.layout.addWidget(self.table)
-        self.home.setLayout(self.home.layout)
+        # Add lines and button to home page
+        self.home_right.layout.addWidget(self.line_text_box)
+        self.home_right.layout.addWidget(self.block_text_box)
+        self.home_right.layout.addWidget(self.enter_line_block)
 
         # Add tabs to widget
         self.layout.addWidget(self.tabs)
@@ -158,7 +169,7 @@ class MyWidget(QWidget):
 
         for row in rows:
             for col in range(col_count):
-                self.red_table.setItem(tableRow, col, QtWidgets.QTableWidgetItem(str(row[col])))
+                self.red_table.setItem(tableRow, col, QTableWidgetItem(str(row[col])))
             tableRow += 1
 
         ## Display data for the Green Line
@@ -173,8 +184,20 @@ class MyWidget(QWidget):
 
         for row in rows:
             for col in range(col_count):
-                self.green_table.setItem(tableRow, col, QtWidgets.QTableWidgetItem(str(row[col])))
+                self.green_table.setItem(tableRow, col, QTableWidgetItem(str(row[col])))
             tableRow += 1
+
+    def get_line_block(self):
+        # Get line and block input
+        line = self.line_text_box.text()
+        block = self.block_text_box.text()
+        
+        # Return line/block info from above values
+        value = self.model.file.get_block_info(line, block)
+        i = 0
+        for v in value:
+            self.table.setItem(i, 0, QTableWidgetItem(str(v)))
+            i += 1
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

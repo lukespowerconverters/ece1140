@@ -71,14 +71,27 @@ get_switch_info()
 def num_of_lines():
     assert len(track.lines) == 2, "Correct number of lines is 2"
 
-## Correct number of blocks per line
+## Correct number of blocks per the green line
 def num_of_blocks_green():
-    green_line = track.get_line("green")
-    assert len(green_line.blocks) == 150, "Correct number of blocks is 150"
+    file.read_new_data()
+    sql_query = """SELECT * FROM 'Green Line'; """
+    file.c.execute(sql_query)
+    green_blocks = file.c.fetchall()
 
+    assert len(green_blocks) == 150, "Correct number of blocks is 150"
+
+num_of_blocks_green()
+
+## Correct number of blocks per the red line
 def num_of_blocks_red():
-    red_line = track.get_line("red")
-    assert len(red_line.blocks) == 76, "Correct number of blocks is 76"
+    file.read_new_data()
+    sql_query = """SELECT * FROM 'Red Line'; """
+    file.c.execute(sql_query)
+    red_blocks = file.c.fetchall()
+
+    assert len(red_blocks) == 76, "Correct number of blocks is 76"
+
+num_of_blocks_red()
 
 #*****************************************
 # Display track properties

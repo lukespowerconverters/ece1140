@@ -56,7 +56,6 @@ class track_information:
         self.c.execute("""DROP table IF EXISTS Stations""")
         self.c.execute("""DROP table IF EXISTS Switches""")
 
-
     def set_filepath(self, fp):
         self.filepath = fp
 
@@ -90,6 +89,9 @@ class track_information:
         ## Propogate the newly created tables
         self.new_station_list()
         self.new_switch_list()
+
+        ## Get rid of null rows in the line tables
+        self.format_line_tables()
 
     def new_train_table(self):
         check = """DROP table IF EXISTS Trains"""
@@ -312,6 +314,36 @@ class track_information:
                     ## Add station to list
                     self.switches.append(infra)
 
+    def format_line_tables(self):
+        sqlquery = """ DELETE FROM 'Red Line' WHERE "Block Number" IS NULL; """
+        self.c.execute(sqlquery)
+        self.db_conn.commit()
+
+        sqlquery = """ DELETE FROM 'Green Line' WHERE "Block Number" IS NULL; """
+        self.c.execute(sqlquery)
+        self.db_conn.commit()
+
+    def get_block_info(self, line, block):
+        line = str(line).lower()
+        if (line == "red"):
+            sql = """ SELECT * FROM 'Red Line'; """
+        elif (line == "green"):
+            sql = """ SELECT * FROM 'Green Line'; """
+        
+        self.c.execute(sql)
+        rows = self.c.fetchall()
+        block = int(block)
+        for row in rows:
+            if (int(row[2]) == block):
+                line = row[0]
+                block = row[2]
+                length = row[3]
+                grade = row[4]
+                speed_limit = row[5]
+                elevation = row[8]
+                value = (line, block, length, grade, speed_limit, elevation)
+        return value
+
 # track_info = track_information()
 # track_info.read_new_data()
-# track_info.get_headers_red()
+# track_info.format_tables()

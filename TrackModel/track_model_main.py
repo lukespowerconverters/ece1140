@@ -111,9 +111,22 @@ class MyWidget(QWidget):
         self.track_png.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
 
+        # Create line input box
+        self.line_text_box = QComboBox()
+        self.line_text_box.addItems(['Red Line', 'Green Line'])
+        self.line_text = QLabel()
+        self.line_text.setText("Line: ")
+
+        # Create block input box
+        self.block_text_box = QComboBox()
+        block_list = []
+        for i in range(151):
+            block_list.append(str(i))
+        self.block_text_box.addItems(block_list)
+        self.block_text = QLabel()
+        self.block_text.setText("Block number: ")
+
         # Create button to get specific block on a specific line
-        self.line_text_box = QLineEdit()
-        self.block_text_box = QLineEdit()
         self.enter_line_block = QPushButton("Get block info")
 
         # Create table widget to display current block values
@@ -130,7 +143,7 @@ class MyWidget(QWidget):
 
         # Add table to the right of the track map to the home page
         self.home_right = QWidget()
-        self.home_right.layout = QVBoxLayout()
+        self.home_right.layout = QFormLayout()
         self.home.layout.addWidget(self.home_right)
         self.home_right.layout.addWidget(self.table)
         self.home_right.setLayout(self.home_right.layout)
@@ -139,8 +152,8 @@ class MyWidget(QWidget):
         self.enter_line_block.clicked.connect(lambda: self.get_line_block())
         
         # Add lines and button to home page
-        self.home_right.layout.addWidget(self.line_text_box)
-        self.home_right.layout.addWidget(self.block_text_box)
+        self.home_right.layout.addRow(self.line_text, self.line_text_box)
+        self.home_right.layout.addRow(self.block_text, self.block_text_box)
         self.home_right.layout.addWidget(self.enter_line_block)
 
         # Add tabs to widget
@@ -189,13 +202,13 @@ class MyWidget(QWidget):
 
     def get_line_block(self):
         # Get line and block input
-        line = self.line_text_box.text()
-        block = self.block_text_box.text()
+        line = self.line_text_box.currentText()
+        block = self.block_text_box.currentText()
         
         # Return line/block info from above values
-        value = self.model.file.get_block_info(line, block)
+        values = self.model.file.get_block_info(line, block)
         i = 0
-        for v in value:
+        for v in values:
             self.table.setItem(i, 0, QTableWidgetItem(str(v)))
             i += 1
 

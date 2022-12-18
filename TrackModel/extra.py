@@ -325,14 +325,16 @@ class track_information:
 
     def get_block_info(self, line, block):
         line = str(line).lower()
-        if (line == "red"):
+        sql = """"""
+        if (line == "red line"):
             sql = """ SELECT * FROM 'Red Line'; """
-        elif (line == "green"):
+        elif (line == "green line"):
             sql = """ SELECT * FROM 'Green Line'; """
         
         self.c.execute(sql)
         rows = self.c.fetchall()
         block = int(block)
+        value = ()
         for row in rows:
             if (int(row[2]) == block):
                 line = row[0]

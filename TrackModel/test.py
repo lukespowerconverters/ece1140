@@ -57,7 +57,6 @@ get_station_info()
 
 ## Import switch data into SQL tables
 def get_switch_info():
-    file.read_new_data()
     sql_query = """SELECT * FROM Switches"""
     file.c.execute(sql_query)
     switches = file.c.fetchall()
@@ -73,7 +72,6 @@ def num_of_lines():
 
 ## Correct number of blocks per the green line
 def num_of_blocks_green():
-    file.read_new_data()
     sql_query = """SELECT * FROM 'Green Line'; """
     file.c.execute(sql_query)
     green_blocks = file.c.fetchall()
@@ -84,7 +82,6 @@ num_of_blocks_green()
 
 ## Correct number of blocks per the red line
 def num_of_blocks_red():
-    file.read_new_data()
     sql_query = """SELECT * FROM 'Red Line'; """
     file.c.execute(sql_query)
     red_blocks = file.c.fetchall()
@@ -98,8 +95,37 @@ num_of_blocks_red()
 #*****************************************
 
 ## Grade for random track blocks correct
+def get_grade():
+    sql_query = """ SELECT [Block Grade (%)] FROM 'Red Line'; """
+    file.c.execute(sql_query)
+    red_grades = file.c.fetchall()
+
+    assert red_grades[0][0] == 0.5, "Correct grade for block number 1 is 0.5"
+    assert red_grades[3][0] == 2, "Correct grade for block number 4 is 2"
+    assert red_grades[62][0] == -1, "Correct grade for block number 63 is -1"
+
+    sql_query = """ SELECT [Block Grade (%)] FROM 'Green Line'; """
+    file.c.execute(sql_query)
+    Green_grades = file.c.fetchall()
+
+    assert Green_grades[0][0] == 0.5, "Correct grade for block number 1 is 0.5"
+    assert Green_grades[3][0] == 2, "Correct grade for block number 4 is 2"
+    assert Green_grades[62][0] == 0, "Correct grade for block number 63 is 0"
+    assert Green_grades[90][0] == -2, "Correct grade for the block number 91 is -2"
+
+get_grade()
 
 ## Elevation for random track blocks correct
+def get_elevation():
+    sql_query = """ SELECT [ELEVATION (M)] FROM 'Red Line'; """
+    file.c.execute(sql_query)
+    red_elevations = file.c.fetchall()
+
+    assert red_elevations[0][0] == 0.25, "Correct elevation for block number 1 is 0.25"
+    assert red_elevations[3][0] == 1, "Correct grade for block number 4 is 1"
+    assert red_elevations[62][0] == -0.75, "Correct grade for block number 63 is -0.75"
+
+get_elevation()
 
 ## Length for random track blocks correct
 
@@ -108,7 +134,6 @@ num_of_blocks_red()
 ## Direction of travel for random track blocks correct
 
 ## Railway crossings for random blocks of travel correct
-
 
 #*****************************************
 # 

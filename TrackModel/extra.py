@@ -7,9 +7,9 @@ class track_information:
     lines = []
     stations = []
     switches = []
-    filepath = "ece1140/TrackModel/track_layout_2.0.xlsx"
+    filepath = "track_layout_2.0.xlsx"
 
-    db_conn = sqlite3.connect("ece1140/TrackModel/data/trackmodel.db")
+    db_conn = sqlite3.connect("trackmodel.db")
     c = db_conn.cursor()
 
     def get_headers_red(self):
@@ -345,7 +345,3 @@ class track_information:
                 elevation = row[8]
                 value = (line, block, length, grade, speed_limit, elevation)
         return value
-
-# track_info = track_information()
-# track_info.read_new_data()
-# track_info.format_tables()

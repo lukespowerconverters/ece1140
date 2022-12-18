@@ -107,7 +107,8 @@ class MyWidget(QWidget):
 
         # Create track layout .png
         self.track_png = QLabel(self)
-        pixmap = QPixmap("ece1140/TrackModel/tracklayout.png")
+        pic = self.get_pic_loc()
+        pixmap = QPixmap(pic)
         self.track_png.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
 
@@ -212,7 +213,10 @@ class MyWidget(QWidget):
             self.table.setItem(i, 0, QTableWidgetItem(str(v)))
             i += 1
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = App()
-    sys.exit(app.exec_())
+    def get_pic_loc(self):
+        curr_dir = os.getcwd()
+        for r,d,f in os.walk(curr_dir):
+            for files in f:
+                if files == "tracklayout.png":
+                    pic = os.path.join(r, files)
+                    return pic
